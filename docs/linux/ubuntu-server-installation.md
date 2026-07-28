@@ -51,4 +51,4 @@ The first step is to create a new virtual machine using Oracle VirtualBox.
   
 ### Virtual Machine Overview
 
-![Virtual Machine Overview](../../screenshots/01-virtual-machine-overview.png)
+![Virtual Machine Overview](../../screenshots/01-virtual-machine-overview.jpg)
