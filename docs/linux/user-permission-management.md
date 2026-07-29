@@ -53,7 +53,7 @@ The account was verified using:
 id tachuser
 ```
 
-![User information](../screenshots/lab-03/01-id-tachuser.png)
+![User information](../../screenshots/lab-03/01-id-tachuser.png)
 
 ---
 
@@ -83,7 +83,7 @@ Verification:
 ls -ld /opt/sysadmins-lab
 ```
 
-![Directory permissions](../screenshots/lab-03/02-directory-permissions.png)
+![Directory permissions](../../screenshots/lab-03/02-directory-permissions.png)
 
 ---
 
@@ -115,7 +115,7 @@ The group inheritance was verified:
 ls -l /opt/sysadmins-lab
 ```
 
-![Group inheritance](../screenshots/lab-03/03-group-inheritance.png)
+![Group inheritance](../../screenshots/lab-03/03-group-inheritance.png)
 
 ---
 
@@ -129,7 +129,7 @@ This occurred because the user was intentionally created as a **standard user** 
 
 This behaviour follows the **Principle of Least Privilege**, ensuring that users only receive the permissions required for their role.
 
-![Sudo denied](../screenshots/lab-03/04-no-sudo-permission.png)
+![Sudo denied](../../screenshots/lab-03/04-no-sudo-permission.png)
 
 ---
 
