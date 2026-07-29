@@ -2,74 +2,192 @@
 
 ## 📌 Objective
 
-Learn how to manage Linux users, groups and permissions on Ubuntu Server.
+The purpose of this lab is to learn how to manage Linux users, groups, ownership and file permissions on an Ubuntu Server system.
+
+This exercise demonstrates fundamental Linux administration tasks commonly performed by system administrators.
 
 ---
 
-## Environment
+## 🖥️ Lab Environment
 
-- Windows 11
-- Oracle VirtualBox 7.2.12
-- Ubuntu Server 24.04 LTS
-
----
-
-## Tasks
-
-- Created a dedicated administration group
-- Created a new Linux user
-- Assigned the user to the administration group
-- Configured ownership with `chown`
-- Configured permissions with `chmod`
-- Applied the SGID bit to a shared directory
-- Verified file inheritance
+| Component | Value |
+|-----------|-------|
+| Host OS | Windows 11 |
+| Hypervisor | Oracle VirtualBox 7.2.12 |
+| Guest OS | Ubuntu Server 24.04 LTS |
+| User account | ubuntu |
+| Hostname | vega |
 
 ---
 
-## Commands Used
+## 📋 Scenario
+
+A new employee joins the company.
+
+The system administrator must:
+
+- create a dedicated user account;
+- create an administration group;
+- assign the user to the appropriate group;
+- create a shared working directory;
+- configure secure file permissions.
+
+The objective is to apply Linux user and permission management best practices.
+
+---
+
+# 👤 User Creation
+
+A dedicated administration group and a new user account were created.
+
+```bash
+sudo groupadd sysadmins
+sudo useradd -m -s /bin/bash tachuser
+sudo passwd tachuser
+sudo usermod -aG sysadmins tachuser
+```
+
+The account was verified using:
+
+```bash
+id tachuser
+```
+
+![User information](../screenshots/lab03/01-id-tachuser.png)
+
+---
+
+# 🔒 Directory Permissions
+
+A shared administration directory was created.
+
+```bash
+sudo mkdir -p /opt/sysadmins-lab
+```
+
+Ownership was assigned:
+
+```bash
+sudo chown tachuser:sysadmins /opt/sysadmins-lab
+```
+
+Permissions were configured:
+
+```bash
+sudo chmod 770 /opt/sysadmins-lab
+```
+
+Verification:
+
+```bash
+ls -ld /opt/sysadmins-lab
+```
+
+![Directory permissions](../screenshots/lab03/02-directory-permissions.png)
+
+---
+
+# 🔐 SGID Configuration
+
+Initially, files created inside the shared directory inherited the user's primary group.
+
+To ensure all new files inherit the shared administration group, the SGID bit was enabled.
+
+```bash
+sudo chmod g+s /opt/sysadmins-lab
+```
+
+Verification:
+
+```bash
+ls -ld /opt/sysadmins-lab
+```
+
+A new file was then created:
+
+```bash
+touch /opt/sysadmins-lab/test.txt
+```
+
+The group inheritance was verified:
+
+```bash
+ls -l /opt/sysadmins-lab
+```
+
+![Group inheritance](../screenshots/lab03/03-group-inheritance.png)
+
+---
+
+# 🛠️ Troubleshooting
+
+While testing permissions, the following message appeared:
+
+> `tachuser is not in the sudoers file.`
+
+This occurred because the user was intentionally created as a **standard user** without administrative privileges.
+
+This behaviour follows the **Principle of Least Privilege**, ensuring that users only receive the permissions required for their role.
+
+![Sudo denied](../screenshots/lab03/04-no-sudo-permission.png)
+
+---
+
+# ✅ Result
+
+At the end of this lab:
+
+- A dedicated administration group was created.
+- A new Linux user was configured.
+- Group membership was verified.
+- A shared directory was secured.
+- Ownership and permissions were configured.
+- SGID was enabled for automatic group inheritance.
+- User permissions were successfully validated.
+
+---
+
+# 🛠️ Commands Used
 
 ```bash
 groupadd
 useradd
 passwd
 usermod
-id
 whoami
+id
+mkdir
 chown
 chmod
-ls -l
+ls
+touch
+su
 ```
 
 ---
 
-## Troubleshooting
+# 📚 What I Learned
 
-When creating files inside the shared directory, new files initially inherited the user's primary group.
+During this lab I learned how to:
 
-```
-tachuser tachuser
-```
-
-To ensure all files inherit the shared administration group, the SGID bit was applied:
-
-```bash
-sudo chmod g+s /opt/sysadmins-lab
-```
-
-New files now inherit:
-
-```
-tachuser sysadmins
-```
+- Create Linux users and groups
+- Assign users to secondary groups
+- Configure file ownership using `chown`
+- Manage file permissions using `chmod`
+- Understand and apply the SGID bit
+- Verify user identity and group membership
+- Apply the Principle of Least Privilege
+- Troubleshoot Linux permission issues
 
 ---
 
-## Skills Demonstrated
+# 🎯 Skills Demonstrated
 
-- Linux user administration
-- Linux group management
-- File ownership
-- File permissions
+- Linux User Management
+- Linux Group Management
+- File Ownership
+- Linux Permissions
 - SGID
-- Principle of Least Privilege
-- Linux CLI
+- Linux Command Line
+- System Administration
+- Security Best Practices
