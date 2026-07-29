@@ -60,7 +60,7 @@ The first step is to create a new virtual machine using Oracle VirtualBox.
   
 ### Virtual Machine Overview
 
-![Virtual Machine Overview](../../screenshots/01-virtual-machine-overview.jpg)
+![Virtual Machine Overview](../../screenshots/lab-01/01-virtual-machine-overview.jpg)
 
 ## 🔎 Initial System Verification
 
