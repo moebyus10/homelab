@@ -1,0 +1,495 @@
+# 👥 Linux User and Permission Management
+
+## 📌 Objective
+
+The purpose of this lab is to learn how to manage users, groups and file permissions on an Ubuntu Linux system.
+
+User and permission management is one of the core responsibilities of a Linux system administrator. Proper configuration ensures that users can access only the resources required for their work while protecting the operating system from unauthorized modifications.
+
+At the end of this lab, multiple user accounts will be created, organized into groups, granted appropriate permissions and tested in a realistic administration scenario.
+
+---
+
+## 🖥️ Lab Environment
+
+| Component | Value |
+|-----------|-------|
+| Host OS | Windows 11 |
+| Hypervisor | Oracle VirtualBox 7.2.12 |
+| Guest OS | Ubuntu 26.04 LTS |
+| User account | moebyus |
+| Hostname | Vega |
+| Network | NAT |
+| Privilege escalation | sudo |
+
+---
+
+## 📋 Scenario
+
+A small company has deployed a new Ubuntu server for its IT department.
+
+Two new system administrators and one software developer have joined the company.
+
+The Linux administrator must create the required user accounts, organize them into security groups, configure file permissions and ensure that administrative privileges are granted only to authorized users.
+
+The objective is to implement a secure and organized access control model following Linux administration best practices.
+
+---
+
+# 🔍 Initial System Verification
+
+Before creating new users and groups, the existing local accounts and groups were inspected.
+
+The following commands were executed:
+
+```bash
+cat /etc/passwd
+```
+
+```bash
+cat /etc/group
+```
+
+```bash
+id
+```
+
+These commands provide information about:
+
+- existing local user accounts;
+- existing groups;
+- the current user's identity and group memberships.
+
+This initial verification ensures that the administrator understands the current system configuration before making any changes.
+
+---
+
+# 👥 Creating User Groups
+
+To separate administrative and development tasks, two dedicated groups were created.
+
+The following commands were executed:
+
+```bash
+sudo groupadd sysadmins
+sudo groupadd developers
+```
+
+The groups were verified afterwards:
+
+```bash
+grep -E "sysadmins|developers" /etc/group
+```
+
+The output confirmed that both security groups were successfully created.
+
+These groups will later be used to assign permissions to shared directories and simplify access management.
+
+![User groups created](../../screenshots/lab-05/01-groups-created.png)
+
+---
+
+# 👤 Creating User Accounts
+
+Three user accounts were created to represent employees of the company.
+
+| Username | Role |
+|----------|------|
+| alice | System Administrator |
+| bob | System Administrator |
+| charlie | Software Developer |
+
+Each account was created with its own home directory and Bash as the default login shell.
+
+```bash
+sudo useradd -m -s /bin/bash alice
+sudo useradd -m -s /bin/bash bob
+sudo useradd -m -s /bin/bash charlie
+```
+
+Passwords were then assigned to each account.
+
+```bash
+sudo passwd alice
+sudo passwd bob
+sudo passwd charlie
+```
+
+The newly created users were verified using:
+
+```bash
+cat /etc/passwd | grep -E "alice|bob|charlie"
+```
+
+and
+
+```bash
+id alice
+id bob
+id charlie
+```
+
+The output confirmed that each user account had been successfully created with its own user ID (UID), primary group and home directory.
+
+![User accounts created](../../screenshots/lab-05/02-users-created.png)
+
+---
+
+# 👥 Assigning Users to Security Groups
+
+After creating the user accounts, each employee was assigned to the appropriate security group.
+
+The two system administrators were added to the **sysadmins** group.
+
+The developer was added to the **developers** group.
+
+```bash
+sudo usermod -aG sysadmins alice
+sudo usermod -aG sysadmins bob
+sudo usermod -aG developers charlie
+```
+
+The configuration was verified using:
+
+```bash
+id alice
+id bob
+id charlie
+```
+
+The output confirmed that:
+
+- Alice belongs to the **sysadmins** group.
+- Bob belongs to the **sysadmins** group.
+- Charlie belongs to the **developers** group.
+
+This group-based organization simplifies permission management and follows standard Linux administration practices.
+
+![Group membership verification](../../screenshots/lab-05/03-group-membership.png)
+---
+
+# 📁 Creating the Company Directory Structure
+
+To simulate a real company environment, two shared directories were created under **/opt/company**.
+
+The following commands were executed:
+
+```bash
+sudo mkdir -p /opt/company/admins
+sudo mkdir -p /opt/company/projects
+```
+
+The resulting directory structure was verified using:
+
+```bash
+tree /opt/company
+```
+
+The output confirmed the following hierarchy:
+
+```text
+/opt/company
+├── admins
+└── projects
+```
+
+The **admins** directory will be shared by the system administrators, while the **projects** directory will be used by the development team.
+
+![Company directory structure](../../screenshots/lab-05/04-directory-structure.png)
+
+---
+
+# 👑 Configuring Directory Ownership
+
+Once the directory structure had been created, ownership was configured to associate each directory with its corresponding security group.
+
+The following commands were executed:
+
+```bash
+sudo chown root:sysadmins /opt/company/admins
+sudo chown root:developers /opt/company/projects
+```
+
+The ownership was verified using:
+
+```bash
+ls -ld /opt/company/admins
+ls -ld /opt/company/projects
+```
+
+The output confirmed that:
+
+- the **admins** directory belongs to the **sysadmins** group;
+- the **projects** directory belongs to the **developers** group.
+
+Using **root** as the owner while assigning the appropriate group allows administrators to centrally manage access through Linux group permissions.
+
+![Directory ownership](../../screenshots/lab-05/05-directory-ownership.png)
+
+---
+
+# 🔐 Configuring Directory Permissions
+
+After assigning ownership, directory permissions were configured to allow collaboration within each team.
+
+The following commands were executed:
+
+```bash
+sudo chmod 2775 /opt/company/admins
+sudo chmod 2775 /opt/company/projects
+```
+
+The permissions were verified using:
+
+```bash
+ls -ld /opt/company/admins
+ls -ld /opt/company/projects
+```
+
+The output displayed permissions similar to:
+
+```text
+drwxrwsr-x
+```
+
+The permission value **2775** has the following meaning:
+
+- **2** enables the **Set Group ID (SGID)** bit;
+- **7** grants the owner read, write and execute permissions;
+- **7** grants the group read, write and execute permissions;
+- **5** grants read and execute permissions to other users.
+
+This configuration allows members of each group to collaborate while preventing unauthorized modifications by users outside the group.
+
+![Directory permissions](../../screenshots/lab-05/06-directory-permissions.png)
+
+---
+
+# 📚 Understanding SGID
+
+The **Set Group ID (SGID)** permission is commonly used on shared directories.
+
+When SGID is enabled on a directory, every new file or subdirectory created inside automatically inherits the directory's group ownership instead of the creator's primary group.
+
+Without SGID:
+
+```text
+alice creates report.txt  → group: alice
+bob creates notes.txt     → group: bob
+```
+
+With SGID enabled:
+
+```text
+alice creates report.txt  → group: sysadmins
+bob creates notes.txt     → group: sysadmins
+```
+
+This behavior greatly simplifies collaboration because all files remain accessible to members of the same working group.
+
+The presence of the letter **s** in the directory permissions confirms that SGID is enabled.
+
+---
+
+# 🧪 Testing User Permissions
+
+The configured permissions were tested using the different user accounts.
+
+### Testing the System Administrator Account
+
+The administrator account **alice** was used to verify access to the administrative directory.
+
+```bash
+su - alice
+```
+
+The account identity was verified:
+
+```bash
+id
+```
+
+A test file was successfully created inside the administrators' directory:
+
+```bash
+touch /opt/company/admins/alice.txt
+```
+
+The file ownership was verified using:
+
+```bash
+ls -l /opt/company/admins
+```
+
+The newly created file automatically inherited the **sysadmins** group, confirming that SGID was working correctly.
+
+![Administrator access test](../../screenshots/lab-05/07-admin-access.png)
+
+---
+
+### Verifying Access Restrictions
+
+Still connected as **alice**, an attempt was made to create a file inside the developers' directory.
+
+```bash
+touch /opt/company/projects/test.txt
+```
+
+The operation failed with a **Permission denied** message.
+
+This confirms that members of the **sysadmins** group cannot modify resources belonging to the **developers** group.
+
+---
+
+### Testing the Developer Account
+
+The developer account **charlie** was then tested.
+
+```bash
+su - charlie
+```
+
+The account information was verified:
+
+```bash
+id
+```
+
+A test file was successfully created inside the projects directory.
+
+```bash
+touch /opt/company/projects/charlie.txt
+```
+
+The file ownership confirmed that it automatically inherited the **developers** group.
+
+```bash
+ls -l /opt/company/projects
+```
+
+![Developer access test](../../screenshots/lab-05/08-developer-access.png)
+
+---
+
+### Verifying Developer Restrictions
+
+Finally, **charlie** attempted to create a file inside the administrators' directory.
+
+```bash
+touch /opt/company/admins/test.txt
+```
+
+The operation failed with a **Permission denied** message.
+
+This confirmed that the developer account could not modify administrative resources.
+
+---
+
+# 🛡️ Granting Administrative Privileges
+
+The two system administrators were granted administrative privileges by adding them to the **sudo** group.
+
+The following commands were executed:
+
+```bash
+sudo usermod -aG sudo alice
+sudo usermod -aG sudo bob
+```
+
+The configuration was verified using:
+
+```bash
+id alice
+id bob
+```
+
+The output confirmed that both users were members of the **sudo** group and could execute administrative commands using `sudo`.
+
+![Sudo group membership](../../screenshots/lab-05/09-sudo-group.png)
+
+---
+
+# ✅ Verifying Administrative Access
+
+The administrator account **alice** was used to verify that administrative privileges were correctly configured.
+
+A new login session was started:
+
+```bash
+su - alice
+```
+
+The following command was executed:
+
+```bash
+sudo whoami
+```
+
+After entering Alice's password, the command returned:
+
+```text
+root
+```
+
+This confirmed that Alice was authorized to execute commands with superuser privileges through `sudo`.
+
+---
+
+# 🚫 Verifying Restricted Administrative Access
+
+The developer account **charlie** was then tested.
+
+A new login session was started:
+
+```bash
+su - charlie
+```
+
+The following command was executed:
+
+```bash
+sudo whoami
+```
+
+The operation failed because the user was not a member of the **sudo** group.
+
+The system displayed a message indicating that Charlie was not authorized to execute administrative commands.
+
+This verification demonstrates the **Principle of Least Privilege**, ensuring that elevated privileges are granted only to authorized administrators.
+
+![Sudo access denied](../../screenshots/lab-05/10-sudo-access.png)
+
+---
+
+# 📊 Security Verification Summary
+
+The user and permission management configuration was successfully validated.
+
+| Verification | Status |
+|--------------|--------|
+| User groups created | ✅ |
+| User accounts created | ✅ |
+| Passwords assigned | ✅ |
+| Group membership verified | ✅ |
+| Company directory structure created | ✅ |
+| Directory ownership configured | ✅ |
+| Directory permissions configured | ✅ |
+| SGID enabled on shared directories | ✅ |
+| User access successfully tested | ✅ |
+| Unauthorized access correctly denied | ✅ |
+| Administrative privileges configured | ✅ |
+| Principle of Least Privilege verified | ✅ |
+
+---
+
+# 📝 Conclusion
+
+This lab demonstrated the implementation of user and permission management on an Ubuntu Linux server.
+
+A realistic company scenario was used to create user accounts, organize users into security groups and configure access to shared resources.
+
+Directory ownership and permissions were configured following Linux administration best practices, including the use of the **Set Group ID (SGID)** bit to ensure consistent group ownership within shared directories.
+
+Administrative privileges were delegated only to authorized users through the **sudo** group, while standard users remained restricted from performing privileged operations.
+
+The completed configuration provides a secure and maintainable access control model based on Linux users, groups and file permissions, illustrating essential skills required for Linux system administration.
