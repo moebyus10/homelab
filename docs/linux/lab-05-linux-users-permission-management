@@ -40,29 +40,10 @@ The objective is to implement a secure and organized access control model follow
 
 Before creating new users and groups, the existing local accounts and groups were inspected.
 
-The following commands were executed:
+The following commands were used:
 
 ```bash
 cat /etc/passwd
-```
-
-```bash
-cat /etc/group
-```
-
-```bash
-id
-```
-
-These commands provide information about:
-
-- existing local user accounts;
-- existing groups;
-- the current user's identity and group memberships.
-
-This initial verification ensures that the administrator understands the current system configuration before making any changes.
-
----
 
 # 👥 Creating User Groups
 
