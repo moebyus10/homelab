@@ -16,15 +16,20 @@ At the end of this lab, remote administration will be possible using both passwo
 |-----------|-------|
 | Host OS | Windows 11 |
 | Hypervisor | Oracle VirtualBox 7.2.12 |
-| Guest OS | Ubuntu Server 24.04 LTS |
+| Guest OS | Ubuntu 26.04 LTS |
 | Hostname | vega |
 | Network | NAT |
+
+> **Note:** During this lab, the Ubuntu virtual machine was replaced with a new Ubuntu 26.04 LTS installation.  
+> The previous VM was removed and the exercises were continued on the new environment.
 
 ---
 
 ## 📋 Scenario
 
-A new Ubuntu server has been deployed inside the company's infrastructure.
+A new Ubuntu virtual machine has been deployed in a test infrastructure.
+
+Instead of managing the system locally with a keyboard and monitor, the system administrator must enable secure remote access using SSH.
 
 Instead of managing the server locally with a keyboard and monitor, the system administrator must enable secure remote access using SSH.
 
