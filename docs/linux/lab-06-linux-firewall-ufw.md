@@ -236,7 +236,7 @@ sudo ufw status verbose
 
 The output confirmed that all firewall rules and default policies remained active after the reboot.
 
-![Firewall persistence after reboot](../../screenshots/lab-06/10-firewall-persistence.png)
+![Firewall persistence after reboot](../../screenshots/lab-06/07-firewall-persistence.png)
 
 ---
 
