@@ -83,7 +83,7 @@ Verification:
 ls -ld /opt/sysadmins-lab
 ```
 
-![Directory permissions](../../screenshots/lab-03/02-directory-permissions.png)
+![Directory permissions](../../screenshots/lab-03/02-directory-permission.png)
 
 ---
 
