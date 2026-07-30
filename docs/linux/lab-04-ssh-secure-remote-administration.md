@@ -262,9 +262,83 @@ This confirms that:
 
 ---
 
+# 🔍 SSH Security Checks
+
+After hardening the SSH service, additional security checks were performed to verify the SSH configuration and authentication files.
+
+---
+
+## 🔐 Checking SSH File Permissions
+
+SSH requires strict permissions on authentication files to prevent unauthorized modifications.
+
+The permissions of the SSH directory and the authorized keys file were checked:
+
+```bash
+ls -la ~/.ssh
+```
+
+The output confirmed the correct permissions:
+
+- `.ssh` directory: `700`
+- `authorized_keys` file: `600`
+
+These permissions ensure that only the user account can access and modify SSH authentication files.
+
+![SSH directory permissions](../../screenshots/lab-04/11-ssh-permissions.png)
+
+---
+
+## 📋 Reviewing SSH Authentication Logs
+
+SSH authentication events were reviewed using the system journal:
+
+```bash
+sudo journalctl -u ssh -n 50
+```
+
+The logs confirmed successful SSH key-based authentications.
+
+The following entries confirmed that the Ed25519 public key was used:
+
+```text
+Accepted publickey for moebyus ... ED25519
+```
+
+The logs also showed SSH session creation events for the user account.
+
+![SSH authentication logs](../../screenshots/lab-04/12-ssh-logs.png)
+
+---
+
+## 🔎 Verifying Effective SSH Security Configuration
+
+The active SSH configuration was checked to confirm the authentication methods enabled by the SSH daemon.
+
+```bash
+sudo sshd -T | grep -E "passwordauthentication|pubkeyauthentication"
+```
+
+The output confirmed:
+
+```text
+passwordauthentication no
+pubkeyauthentication yes
+```
+
+This verifies that:
+
+- password authentication is disabled;
+- public key authentication is enabled;
+- SSH access is restricted to authorized cryptographic keys.
+
+![SSH security verification](../../screenshots/lab-04/13-ssh-security-verification.png)
+
+---
+
 # 📋 Final SSH Security Summary
 
-The SSH server configuration was successfully completed.
+The SSH hardening process was successfully completed.
 
 | Security Measure | Status |
 |-----------------|--------|
@@ -275,21 +349,21 @@ The SSH server configuration was successfully completed.
 | Remote SSH connection tested | ✅ |
 | Ed25519 SSH key authentication configured | ✅ |
 | Password authentication disabled | ✅ |
-| SSH configuration verified | ✅ |
+| SSH file permissions verified | ✅ |
+| SSH authentication logs reviewed | ✅ |
+| Effective SSH configuration verified | ✅ |
 
 ---
 
 # 📝 Conclusion
 
-This lab demonstrated the deployment and securing of an SSH server on Ubuntu.
+This lab demonstrated the deployment, configuration and securing of an SSH server on Ubuntu.
 
-The system was configured to allow secure remote administration from a Windows client through VirtualBox NAT port forwarding.
+The final configuration provides secure remote administration through:
 
-The final configuration follows Linux administration security best practices:
+- SSH key-based authentication using Ed25519;
+- disabled password authentication;
+- protected SSH authentication files;
+- verification of SSH security settings and authentication logs.
 
-- remote administration through SSH;
-- authentication using cryptographic keys;
-- removal of password-based authentication;
-- verification of the effective SSH daemon configuration.
-
-The Ubuntu server is now ready for secure remote management.
+The Ubuntu server is now configured for secure remote administration.
