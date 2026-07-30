@@ -2,11 +2,11 @@
 
 ## 📌 Objective
 
-The purpose of this lab is to install, configure and secure an OpenSSH Server on Ubuntu.
+The purpose of this lab is to install, configure and secure an OpenSSH Server on an Ubuntu system.
 
 SSH (Secure Shell) is the standard protocol used by system administrators to securely manage Linux servers over a network.
 
-At the end of this lab, remote administration will be possible using both password authentication and SSH key authentication.
+At the end of this lab, remote administration will be possible using password authentication and SSH key authentication.
 
 ---
 
@@ -16,44 +16,42 @@ At the end of this lab, remote administration will be possible using both passwo
 |-----------|-------|
 | Host OS | Windows 11 |
 | Hypervisor | Oracle VirtualBox 7.2.12 |
-| Guest OS | Ubuntu 26.04 LTS |
-| Hostname | vega |
+| Initial Guest OS | Ubuntu 24.04 LTS |
+| Final Guest OS | Ubuntu 26.04 LTS |
+| User account | moebyus |
+| Hostname | Vega |
 | Network | NAT |
 
-> **Note:** During this lab, the Ubuntu virtual machine was replaced with a new Ubuntu 26.04 LTS installation.  
-> The previous VM was removed and the exercises were continued on the new environment.
+---
+
+## ⚠️ Environment Change During the Lab
+
+The lab was initially performed using an Ubuntu 24.04 LTS virtual machine.
+
+During the SSH configuration and testing phase, connection issues persisted despite correct SSH service configuration and network settings.
+
+After troubleshooting, the decision was made to replace the virtual machine with a fresh Ubuntu 26.04 LTS installation in order to continue the exercise on a clean and stable environment.
+
+The previous virtual machine was removed, and all remaining SSH configuration steps were reproduced on the new Ubuntu 26.04 LTS system.
 
 ---
 
 ## 📋 Scenario
 
-A new Ubuntu virtual machine has been deployed in a test infrastructure.
+A new Ubuntu system has been deployed inside a test infrastructure.
 
-Instead of managing the system locally with a keyboard and monitor, the system administrator must enable secure remote access using SSH.
-
-Instead of managing the server locally with a keyboard and monitor, the system administrator must enable secure remote access using SSH.
+Instead of managing the machine locally with a keyboard and monitor, the system administrator must enable secure remote access using SSH.
 
 The server will first be tested with password authentication before being secured using SSH key authentication.
 
 ---
 
-## 🔍 SSH Service Verification
+# 🔍 SSH Service Verification
 
-The first step consisted of checking whether the OpenSSH service was already installed and running.
+The first step consisted of checking whether the OpenSSH service was installed and running.
 
 ```bash
 systemctl status ssh
-```
-
-This command displays:
-
-- the service status;
-- whether the service is enabled;
-- the current process information.
-
-![SSH service status](../../screenshots/lab-04/01-ssh-service-status.png)
-
-The server will first be tested with password authentication before being secured using SSH key authentication.
 
 ---
 
