@@ -114,7 +114,182 @@ The virtual machine was configured in **NAT** mode.
 To allow SSH connections from the Windows host, a VirtualBox port forwarding rule was created.
 
 | Host Port | Guest Port | Protocol |
-|-----------|-----------|----------|
+|-----------|-----------:|----------|
 | 2222 | 22 | TCP |
 
-This configuration forwards incoming connections on port **2222** of the host machine to the SSH service running on port **22** inside the Ubuntu virtual machine.
+This configuration forwards incoming connections on port **2222** of the Windows host to the SSH service running on port **22** inside the Ubuntu virtual machine.
+
+---
+
+## 🔌 Testing SSH Connection from Windows
+
+The SSH connection was tested from the Windows host using the following command:
+
+```powershell
+ssh moebyus@localhost -p 2222
+```
+
+The connection was successfully established through the VirtualBox NAT port forwarding rule.
+
+![SSH connection test from Windows](../../screenshots/lab-04/05-ssh-connection-test.png)
+
+---
+
+## 🔑 SSH Key Authentication
+
+To improve security, SSH key authentication was configured.
+
+An **Ed25519** key pair was generated on the Windows client:
+
+```powershell
+ssh-keygen -t ed25519
+```
+
+The public key was then copied to the Ubuntu server and stored in:
+
+```text
+~/.ssh/authorized_keys
+```
+
+![SSH authorized key installed](../../screenshots/lab-04/06-authorized-key-installed.png)
+
+A new SSH connection was tested from the Windows host.
+
+The authentication succeeded using the SSH key without prompting for the user's password.
+
+```powershell
+ssh moebyus@localhost -p 2222
+```
+
+![SSH key authentication](../../screenshots/lab-04/07-ssh-key-authentication.png)
+
+---
+
+# 🔒 SSH Hardening: Disabling Password Authentication
+
+Once SSH key authentication was successfully validated, password-based authentication was disabled to improve the security of the SSH service.
+
+Using SSH keys instead of passwords reduces the risk of brute-force attacks and ensures that only authorized clients with the private key can access the server.
+
+---
+
+## ⚙️ Updating SSH Configuration
+
+The SSH daemon configuration file was edited:
+
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+
+The following directive was modified:
+
+Before:
+
+```text
+PasswordAuthentication yes
+```
+
+After:
+
+```text
+PasswordAuthentication no
+```
+
+This configuration disables password authentication and forces users to authenticate using their SSH key pair.
+
+![SSH password authentication disabled](../../screenshots/lab-04/08-password-authentication-disabled.png)
+
+---
+
+## 🔄 Restarting the SSH Service
+
+After modifying the configuration file, the SSH service was restarted to apply the changes.
+
+```bash
+sudo systemctl restart ssh
+```
+
+The service status was checked:
+
+```bash
+systemctl status ssh
+```
+
+The SSH daemon restarted successfully with the new security configuration.
+
+![SSH service restarted](../../screenshots/lab-04/09-ssh-restart-after-hardening.png)
+
+---
+
+## ✅ Testing SSH Key Authentication After Hardening
+
+A new SSH connection was initiated from the Windows host:
+
+```powershell
+ssh moebyus@localhost -p 2222
+```
+
+The connection was successfully established without requesting the user's password.
+
+Authentication was performed using the previously configured Ed25519 SSH key.
+
+![SSH key authentication after hardening](../../screenshots/lab-04/10-ssh-key-only-login.png)
+
+---
+
+## 🔎 Verifying SSH Security Configuration
+
+The effective SSH configuration was verified to confirm that password authentication was disabled and public key authentication remained enabled.
+
+```bash
+sudo sshd -T | grep -E "passwordauthentication|pubkeyauthentication"
+```
+
+The output confirmed:
+
+```text
+passwordauthentication no
+pubkeyauthentication yes
+```
+
+This confirms that:
+
+- password authentication is disabled;
+- public key authentication remains enabled;
+- SSH remote administration is now restricted to authorized SSH keys.
+
+![SSH service restarted](../../screenshots/lab-04/09-ssh-restart-after-hardening.png)
+
+---
+
+# 📋 Final SSH Security Summary
+
+The SSH server configuration was successfully completed.
+
+| Security Measure | Status |
+|-----------------|--------|
+| OpenSSH server installed | ✅ |
+| SSH service running | ✅ |
+| SSH enabled at system startup | ✅ |
+| VirtualBox NAT port forwarding configured | ✅ |
+| Remote SSH connection tested | ✅ |
+| Ed25519 SSH key authentication configured | ✅ |
+| Password authentication disabled | ✅ |
+| SSH configuration verified | ✅ |
+
+---
+
+# 📝 Conclusion
+
+This lab demonstrated the deployment and securing of an SSH server on Ubuntu.
+
+The system was configured to allow secure remote administration from a Windows client through VirtualBox NAT port forwarding.
+
+The final configuration follows Linux administration security best practices:
+
+- remote administration through SSH;
+- authentication using cryptographic keys;
+- removal of password-based authentication;
+- verification of the effective SSH daemon configuration.
+
+The Ubuntu server is now ready for secure remote management.
