@@ -51,7 +51,7 @@ This command displays:
 - whether the service is enabled;
 - the current process information.
 
-![SSH service status](../../screenshots/lab04/01-ssh-service-status.png)
+![SSH service status](../../screenshots/lab-04/01-ssh-service-status.png)
 
 The server will first be tested with password authentication before being secured using SSH key authentication.
 
@@ -73,7 +73,7 @@ The output confirmed that:
 - the server was listening on TCP port **22**;
 - remote SSH connections were now possible.
 
-![SSH service running](../../screenshots/lab04/02-ssh-service-running.png)
+![SSH service running](../../screenshots/lab-04/02-ssh-service-running.png)
 
 ---
 
@@ -87,7 +87,7 @@ sudo systemctl enable ssh
 
 The service status confirmed that SSH was now enabled at boot.
 
-![SSH enabled](../../screenshots/lab04/03-ssh-enabled.png)
+![SSH enabled](../../screenshots/lab-04/03-ssh-enabled.png)
 
 ---
 
@@ -105,7 +105,7 @@ The output confirmed that:
 - the service was accepting connections on both IPv4 and IPv6;
 - the server was ready for remote administration.
 
-![SSH listening on port 22](../../screenshots/lab04/04-ssh-port-22-listening.png)
+![SSH listening on port 22](../../screenshots/lab-04/04-ssh-port-22-listening.png)
 
 ---
 
