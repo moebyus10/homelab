@@ -1,4 +1,4 @@
-# 🐧 Lab 12 - Process Management & System Analysis
+# 🐧 Process Management & System Analysis
 
 ## 🎯 Objective
 
