@@ -1,4 +1,4 @@
-# 🐧 Lab 11 — Bash Scripting
+# 🐧 Bash Scripting
 
 ## 🎯 Objective
 
