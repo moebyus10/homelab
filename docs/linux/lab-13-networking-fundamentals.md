@@ -1,4 +1,4 @@
-# Lab 13 — Networking Fundamentals
+# Networking Fundamentals
 
 ## 🎯 Objective
 
