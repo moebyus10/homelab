@@ -409,14 +409,20 @@ This project will serve as a foundation for future labs by adding new modules re
 
 ---
 
-# 🚀 Next Lab
+# ✅ Lab Conclusion
 
-➡️ **Lab 12 — Process Management**
+This lab introduced Bash scripting as a practical tool for Linux system administration.
 
-Topics:
+Starting from basic command execution, the project evolved into a complete administration toolkit capable of collecting system information, performing automated health checks, generating reports, and providing both interactive and command-line interfaces.
 
-- Process inspection
-- CPU and memory monitoring
-- Signals
-- Process priorities
-- Process control
+Throughout this lab, several key Linux administration concepts were applied:
+
+* Automating repetitive system checks
+* Monitoring services and resources
+* Managing Bash variables, functions, conditions, loops, and arguments
+* Creating structured reports for system diagnostics
+* Designing a reusable administration tool
+
+The final version of the script (**Linux Homelab Administration Toolkit v1.5**) provides a solid foundation that can be extended with additional modules in future labs.
+
+Future improvements will include integrating process monitoring, network diagnostics, storage management, backups, and automation features to progressively build a complete Linux administration toolkit.
