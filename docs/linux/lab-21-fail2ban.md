@@ -1,4 +1,4 @@
-# 🔥 Lab 21 — Fail2Ban
+# 🔥 Fail2Ban
 
 ## 🎯 Objective
 
