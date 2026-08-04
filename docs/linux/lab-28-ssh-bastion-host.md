@@ -1,4 +1,4 @@
-# 🔐 Lab 28 — SSH Bastion Host
+# 🔐 SSH Bastion Host
 
 ## 📌 Overview
 
